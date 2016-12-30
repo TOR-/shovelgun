@@ -40,9 +40,9 @@ function render() {
     requestAnimationFrame( render );
 
     character.calculatePosition();
-    cube.position.x = character.position.x;
+    camera.position.x = cube.position.x = character.position.x;
     cube.position.y = character.position.y;
-    cube.position.z = character.position.z;
+    camera.position.z = cube.position.z = character.position.z;
     //cube.rotation.y += 0.02;
     
     renderer.render( scene, camera );

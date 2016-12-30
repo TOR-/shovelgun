@@ -4,7 +4,7 @@ function Block(x,y,z, size, color) {
     this.Mesh = new THREE.Mesh( new THREE.BoxGeometry( this.size, this.size, this.size ), new THREE.MeshLambertMaterial( { color: this.color } ));
     this.Mesh.position.set(size * x, size * y, size * z);
     console.log("Mesh at " + x + ", " + y + ", " + z);
-    scene.add(this.Mesh);
+    //scene.add(this.Mesh);
     return this.Mesh;
 };
 
