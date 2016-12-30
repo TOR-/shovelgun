@@ -9,4 +9,7 @@ var Shoveller = function (v, s) {
     this.position.y += this.velocity.y;
     this.position.z += this.velocity.z;
   };
+    this.jump = function () {
+	this.velocity.y -= 1;
+    };
 };
