@@ -7,7 +7,7 @@ var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
-var cube = new THREE.Mesh( new THREE.BoxGeometry( 5, 10, 5 ), new THREE.MeshLambertMaterial( { color: 0xaaa0a0 } ));
+var cube = new THREE.Mesh( new THREE.BoxGeometry( 2, 10, 2 ), new THREE.MeshLambertMaterial( { color: 0xaaa0a0 } ));
 scene.add( cube );
 
 var pointLight = new THREE.PointLight(0xffffff);
@@ -29,11 +29,11 @@ ground.position.set( 0, FLOOR, 0 );
 ground.rotation.x = -Math.PI/2;
 //scene.add(ground);
 
-//function init() {
-var map = new Map("maps/original.map");
-map.load();
-    //map.load("maps/original.map");
-//}
+function init() {
+    var map = new Map("maps/hugs.map");
+    map.load();
+}
+init();
 
 function render() {
     
@@ -43,11 +43,9 @@ function render() {
     camera.position.x = cube.position.x = character.position.x;
     cube.position.y = character.position.y;
     camera.position.z = cube.position.z = character.position.z;
-    //cube.rotation.y += 0.02;
     
     renderer.render( scene, camera );
 }
-//init();
 render();
 
 function keyDown(event){
@@ -79,6 +77,6 @@ function keyDown(event){
     }
     else
     {
-	console.log("Dunno");
+//	console.log("Dunno");
     }
 }

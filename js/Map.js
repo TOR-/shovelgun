@@ -1,62 +1,52 @@
 function Map(path) {
     this.path = path;
-    var mapdata;
-    var testdata = ['.','.','.','.','\n','.','0','0','.','\n','.','0','0','.','\n','.','.','.','.'];
+   // var testdata = ['.','.','.','.','\n','.','0','0','.','\n','.','0','0','.','\n','.','.','.','.'];
+    this.map;
     this.load = function(){
 	// returns raw map data as an array
 	this.raw = function() {
 	    var xhttp = new XMLHttpRequest();
 	    xhttp.onreadystatechange = function() {
-		mapdata = this.responseText.split('');//to array
 		if (this.readyState == 4 && this.status == 200) {
 		    // Check browser support
 		    if (typeof(Storage) !== "undefined") {
 			// Store
+			this.map = this.responseText;
 			sessionStorage.setItem("map", this.responseText);
 		    } else {
-			colsole.log("Sorry, your browser does not support Web Storage...");
+			console.log("Web Storage not supported in this browser. Get a better one");
 		    }
-		    
-		    console.log(mapdata);//data defined
 		}
 	    };
 	    xhttp.open("GET", this.path, true);
 	    xhttp.send();
-	    console.log(mapdata);//data undefined
 	}
 	// returns map geometry
 	this.geometry = function(data) {
-	    console.log(mapdata);//data undefined
-	    var blocks = [], width = 0, height;
+	    var blocks = [], w = 0, h;
 	    var size = 5;
 	    var i = 0;
-	    for (height = 0; (height * (width + 1)) < data.length; height++){
-		i = ( height * (width + 1) );
-		width = 0;
-		for (width = 0; data[width] != '\n'; width++) {
-		    if (data[i + width] == '.') {
-			blocks[i + width] = new Block(width, -1, height, size, 0x00ff00);
+	    for (h = 0; (h * (w + 1)) < data.length; h++){
+		i = ( h * (w + 1) );
+		w = 0;
+		for (w = 0; data[w] != '\n'; w++) {
+		    if (data[i + w] == '.') {
+			blocks[i + w] = new Block(w, -1, h, size, 0x00ff00);
 		    }
-		    else if (data[i + width] == '0') {
-			blocks[i + width] = new Block(width, 0, height, size, 0x0000ff);
+		    else if (data[i + w] == '0') {
+			blocks[i + w] = new Block(w, 0, h, size, 0x0000ff);
 		    }
-		    else {
-			blocks[i + width] = new Block(width, 0, height, size, 0xff0000);
+		    else { // Just in case
+			blocks[i + w] = new Block(w, 0, h, size, 0xff0000);
 		    }
 		}
-		blocks[i + width] = 0;
+		blocks[i + w] = 0;
 	    }
-	    console.log("height: " + height + ", width: " + width);
 	    return blocks;
 	}
 	this.raw();
 	var m = this.geometry(sessionStorage.getItem("map"));
-	//console.log(m[0]);
-	for( var i = 0; i < m.length; i++){
-	    if (m[i] != 0) scene.add(m[i]);
-	}
-//	this.raw();
-	console.log(mapdata);//data undefined
-	//console.log(this.geometry(this.raw(this.path)));
+	for ( var i = 0; i < m.length; i++) if (m[i] != 0) scene.add(m[i]);
+	return m;
     };
 };
