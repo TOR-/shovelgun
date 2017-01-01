@@ -38,7 +38,7 @@ init();
 function render() {
     
     requestAnimationFrame( render );
-
+    
     character.calculatePosition();
     camera.position.x = cube.position.x = character.position.x;
     cube.position.y = character.position.y;
@@ -57,19 +57,19 @@ function keyDown(event){
     }
     else if ( n == 38 )//UpArrow
     {
-	character.velocity.z += increment;
+	character.velocity.z = increment;
     }
     else if ( n == 40 )//DownArrow
     {
-	character.velocity.z -= increment;
+	character.velocity.z = -increment;
     }
     else if ( n == 37 )//LeftArrow
     {
-	character.velocity.x -= increment;
+	character.velocity.x = -increment;
     }
     else if ( n == 39 )//RightArrow
     {
-	character.velocity.x += increment;
+	character.velocity.x = increment;
     }
     else if ( n == 82 )//r
     {
@@ -77,6 +77,26 @@ function keyDown(event){
     }
     else
     {
-//	console.log("Dunno");
+	//	console.log("Dunno");
+    }
+}
+
+function keyUp(event) {
+    var n = event.keyCode;
+    if ( n == 38 )//UpArrow
+    {
+	character.velocity.z = 0;
+    }
+    else if ( n == 40 )//DownArrow
+    {
+	character.velocity.z = 0;
+    }
+    else if ( n == 37 )//LeftArrow
+    {
+	character.velocity.x = 0;
+    }
+    else if ( n == 39 )//RightArrow
+    {
+	character.velocity.x = 0;
     }
 }
