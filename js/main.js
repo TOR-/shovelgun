@@ -1,102 +1,59 @@
-var scene = new THREE.Scene();
-scene.background = new THREE.Color( 0xddeedd );
-var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-camera.lookAt({x:0,y:0,z:0});
+var Game = {};
 
-var renderer = new THREE.WebGLRenderer();
-renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
-
-var cube = new THREE.Mesh( new THREE.BoxGeometry( 2, 10, 2 ), new THREE.MeshLambertMaterial( { color: 0xaaa0a0 } ));
-scene.add( cube );
-
-var pointLight = new THREE.PointLight(0xffffff);
-pointLight.position.x = 100;
-pointLight.position.y = -100;
-pointLight.position.z = 130;
-scene.add(pointLight);
-
-scene.add( new THREE.AmbientLight( 0x404040 ) );
-
-camera.position.y = -50;
-camera.rotation.x = Math.PI / 2;
-
-var character = new Shoveller(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, 0));
-character.position.set(0,-2.5,0);
-var FLOOR = 0;
-var ground = new THREE.Mesh(new THREE.PlaneGeometry(70, 50, 32, 32), new THREE.MeshLambertMaterial( { color: 0xaa00aa, side: THREE.DoubleSide} ));
-ground.position.set( 0, FLOOR, 0 );
-ground.rotation.x = -Math.PI/2;
-//scene.add(ground);
-
-function init() {
-    var map = new Map("maps/hugs.map");
-    map.load();
-}
-init();
-
-function render() {
+Game.init = function () {
+    console.log("init");
     
-    requestAnimationFrame( render );
+    this.scene = new THREE.Scene();
+    this.scene.background = new THREE.Color( 0xddeedd );
+    this.camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+    this.camera.lookAt({x:0,y:0,z:0});
+    this.camera.position.set(0,-50,0);
     
-    character.calculatePosition();
-    camera.position.x = cube.position.x = character.position.x;
-    cube.position.y = character.position.y;
-    camera.position.z = cube.position.z = character.position.z;
-    
-    renderer.render( scene, camera );
-}
-render();
+    this.renderer = new THREE.WebGLRenderer();
+    this.renderer.setSize( window.innerWidth, window.innerHeight );
+    document.body.appendChild( this.renderer.domElement );
+    document.body.onkeyup = Input.keyUp;
+    document.body.onkeydown = Input.keyDown;
+    this.cube = new THREE.Mesh( new THREE.BoxGeometry( 2, 10, 2 ), new THREE.MeshLambertMaterial( { color: 0xabad00 } ));
+    //this.cube.position.set(5,-5,5);
+    this.scene.add(this.cube);
+    this.pointLight = new THREE.PointLight(0xffffff);
+    this.pointLight.position.set( 100, -100, 130)
+    this.scene.add( this.pointLight);
 
-function keyDown(event){
-    var n = event.keyCode;
-    var increment = 0.1;
-    if(n == 32){
-	character.position.set(0,0,0);
-	character.velocity.x = character.velocity.z = 0;
-    }
-    else if ( n == 38 )//UpArrow
-    {
-	character.velocity.z = increment;
-    }
-    else if ( n == 40 )//DownArrow
-    {
-	character.velocity.z = -increment;
-    }
-    else if ( n == 37 )//LeftArrow
-    {
-	character.velocity.x = -increment;
-    }
-    else if ( n == 39 )//RightArrow
-    {
-	character.velocity.x = increment;
-    }
-    else if ( n == 82 )//r
-    {
-	location.reload(true);
-    }
-    else
-    {
-	//	console.log("Dunno");
-    }
+    this.scene.add( new THREE.AmbientLight( 0x404040 ) );
+
+//    this.camera.position.y = -50;
+    this.camera.rotation.x = Math.PI / 2;
+
+    this.character = new Shoveller(new THREE.Vector3(10, -5, 5), new THREE.Mesh( new THREE.BoxGeometry( 2, 10, 2 ), new THREE.MeshLambertMaterial( { color: 0xfff000 } )));
+   
+    this.map = new Map("maps/hugs.map");
+    this.map.load();
+};
+
+Game.update = function () {
+    this.character.boundingBoxUpdate();
+    this.character.calculatePosition();
 }
 
-function keyUp(event) {
-    var n = event.keyCode;
-    if ( n == 38 )//UpArrow
-    {
-	character.velocity.z = 0;
-    }
-    else if ( n == 40 )//DownArrow
-    {
-	character.velocity.z = 0;
-    }
-    else if ( n == 37 )//LeftArrow
-    {
-	character.velocity.x = 0;
-    }
-    else if ( n == 39 )//RightArrow
-    {
-	character.velocity.x = 0;
-    }
-}
+var step = function (elapsed) {
+    requestAnimationFrame( step );
+    
+    Game.update();
+    
+    Game.camera.position.x = Game.character.position.x;
+    Game.camera.position.z = Game.character.position.z;
+    
+    Game.renderer.render( Game.scene, Game.camera );
+};//.bind(Game);
+
+Game.run = function () {
+    this.init();
+    step();
+};
+Game.run();
+
+
+//init();
+//render();

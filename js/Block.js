@@ -6,14 +6,14 @@ function Block(x,y,z, size, color) {
     return this.Mesh;
 };
 
-Block.prototype.position = function () {
+Block.position = function () {
     this.x;
     this.y;
     this.z;
 };
 
 
-Block.prototype.position.set = function (i, j, k) {
+Block.position.set = function (i, j, k) {
     this.x = i*this.size;
     this.y = j*this.size;
     this.z = k*this.size;

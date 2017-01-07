@@ -1,6 +1,6 @@
 function Map(path) {
     this.path = path;
-   // var testdata = ['.','.','.','.','\n','.','0','0','.','\n','.','0','0','.','\n','.','.','.','.'];
+    // var testdata = ['.','.','.','.','\n','.','0','0','.','\n','.','0','0','.','\n','.','.','.','.'];
     this.map;
     this.load = function(){
 	// returns raw map data as an array
@@ -14,7 +14,7 @@ function Map(path) {
 			this.map = this.responseText;
 			sessionStorage.setItem("map", this.responseText);
 		    } else {
-			console.log("Web Storage not supported in this browser. Get a better one");
+			console.log("Web Storage not supported in this browser. Do come back with a better one");
 		    }
 		}
 	    };
@@ -23,7 +23,9 @@ function Map(path) {
 	}
 	// returns map geometry
 	this.geometry = function(data) {
-	    var blocks = [], w = 0, h;
+	    var blocks = [];
+	    this.bBox = [];
+	    var w = 0, h;
 	    var size = 5;
 	    var i = 0;
 	    for (h = 0; (h * (w + 1)) < data.length; h++){
@@ -32,6 +34,10 @@ function Map(path) {
 		for (w = 0; data[w] != '\n'; w++) {
 		    if (data[i + w] == '.') {
 			blocks[i + w] = new Block(w, -1, h, size, 0x00ff00);
+			this.bBox[i + w] = new THREE.BoxHelper(blocks[i + w], 0xff00ff);
+			this.bBox[i + w].update(blocks[i + w]);
+//			Game.scene.add(this.bBox[i + w]);
+			console.log("block");
 		    }
 		    else if (data[i + w] == '0') {
 			blocks[i + w] = new Block(w, 0, h, size, 0x0000ff);
@@ -46,7 +52,12 @@ function Map(path) {
 	}
 	this.raw();
 	var m = this.geometry(sessionStorage.getItem("map"));
-	for ( var i = 0; i < m.length; i++) if (m[i] != 0) scene.add(m[i]);
+	for ( var i = 0; i < m.length; i++) {
+	    if (m[i] != 0) Game.scene.add(m[i]);
+	    //	    if (typeof this.bBox[i] != "undefined")
+//	    Game.scene.add(this.bBox[i]);
+	    //console.log(this.bBox[i]);
+	}
 	return m;
     };
 };
