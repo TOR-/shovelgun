@@ -2,7 +2,7 @@ function Block(x,y,z, size, color) {
     this.size = size;
     this.color = color;
     this.Mesh = new THREE.Mesh( new THREE.BoxGeometry( this.size, this.size, this.size ), new THREE.MeshLambertMaterial( { color: this.color } ));
-    this.Mesh.position.set(size * x, size * y, size * z);
+    this.Mesh.position.set(size * x + size/2, size * y, size * z + size/2);
     return this.Mesh;
 };
 
